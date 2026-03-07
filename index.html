@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LADDERICE UNDER THE STANDS — RSVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'CustomDisplay';
+      src: url('font.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:       #cc2222;
+      --red-dk:    #a01818;
+      --blue:      #3b50b8;
+      --blue-lt:   #5568cc;
+      --green:     #2d8a2d;
+      --green-lt:  #3aaa3a;
+      --yellow:    #f0c820;
+      --yellow-lt: #ffe14a;
+      --cream:     #f5f0e0;
+      --dark:      #1a1a18;
+      --brown:     #3d2c1a;
+      --error:     #ff3333;
+      --font-display: 'CustomDisplay', Impact, sans-serif;
+      --font-body:    'Sarabun', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flow-root; /* prevents margin-collapse with .frame-outer */
+    }
+
+    /* ── POSTER WALLPAPER ── */
+    .wallpaper {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      min-height: 100%;
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      grid-auto-rows: 175px;
+      align-content: start;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .wallpaper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid rgba(0,0,0,0.5);
+      display: block;
+    }
+
+    .wallpaper::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      pointer-events: none;
+    }
+
+    /* Frame sits above wallpaper — 175px top/bottom reveals one tile row */
+
+    /* ── GRAIN OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.7;
+    }
+
+    /* ── CARD FRAME (per-card retro border) ── */
+    .card-frame {
+      background: var(--green);
+      padding: 8px;
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .card-frame > *:not(.corner-ball) {
+      border: 6px solid var(--red);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    /* ── CORNER BALLS ── */
+    .corner-ball {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      z-index: 10;
+    }
+
+    .corner-ball.tl { top: -4px; left: -4px; }
+    .corner-ball.tr { top: -4px; right: -4px; }
+    .corner-ball.bl { bottom: -4px; left: -4px; }
+    .corner-ball.br { bottom: -4px; right: -4px; }
+
+    .corner-ball svg { width: 100%; height: 100%; }
+
+    /* ── HERO SECTION (POSTER TOP) ── */
+    .poster-hero {
+      padding: 40px 32px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg,
+          var(--blue) 0%,
+          var(--blue-lt) 30%,
+          #7a8833 60%,
+          var(--green-lt) 100%);
+    }
+
+    .poster-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.22'/%3E%3C/svg%3E");
+      opacity: 0.72;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .poster-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg,
+        #ff0000, #ff8800, #ffdd00, #00cc44, #0088ff, #8800ff);
+    }
+
+    .poster-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .invite-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 12vw, 7rem);
+      line-height: 0.82;
+      color: #f0cf3f;
+      white-space: nowrap;
+      text-align: center;
+      filter: drop-shadow(0 4px 0 rgba(29, 43, 118, 0.95)) drop-shadow(0 9px 16px rgba(0,0,0,0.26));
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+
+    .invite-line {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .invite-line-small {
+      font-size: 0.58em;
+      line-height: 0.68;
+      letter-spacing: 0.035em;
+      margin-bottom: 0;
+    }
+
+    .invite-line-large {
+      font-size: 1.02em;
+      line-height: 0.74;
+      margin-top: -0.68em;
+    }
+
+    .invite-char {
+      display: inline-block;
+      color: #f0cf3f;
+    }
+
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .invite-char {
+        color: transparent;
+        background-image:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='0.26'/%3E%3C/svg%3E"),
+          radial-gradient(circle at 50% 88%,
+            rgba(41, 108, 255, 0.98) 0%,
+            rgba(41, 108, 255, 0.88) 20%,
+            rgba(41, 108, 255, 0.46) 42%,
+            rgba(41, 108, 255, 0.08) 60%,
+            rgba(41, 108, 255, 0) 72%),
+          linear-gradient(180deg,
+            #ffe93b 0%,
+            #ffd91d 34%,
+            #f0cb1f 50%,
+            #95a9ff 64%,
+            #3a78ff 84%,
+            #1452ff 100%);
+        background-size: 86px 86px, 100% 100%, 100% 100%;
+        background-repeat: repeat, no-repeat, no-repeat;
+        background-position: center center, center center, center center;
+        background-blend-mode: multiply, screen, normal;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke: 3px #0a0a09;
+      }
+    }
+
+    /* ── CENTER CARD ── */
+    .center-card {
+      width: min(390px, 84%);
+      max-width: 390px;
+      margin: -78px auto 8px;
+      text-align: center;
+      position: relative;
+    }
+
+    .card-logo {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(2px 3px 6px rgba(0,0,0,0.4));
+    }
+
+    body.launch-animate .invite-title {
+      transform-origin: 50% 50%;
+      animation: invite-pop 2.2s cubic-bezier(0.2, 0.9, 0.24, 1.16) both;
+    }
+
+    body.launch-animate .center-card {
+      transform-origin: 50% 50%;
+      animation: logo-pop 2s cubic-bezier(0.2, 0.9, 0.24, 1.12) 1.4s both;
+    }
+
+    @keyframes invite-pop {
+      0% {
+        opacity: 0.2;
+        transform: scale(0.12);
+      }
+      68% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes logo-pop {
+      0% {
+        opacity: 0.18;
+        transform: scale(0.08);
+      }
+      72% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body.launch-animate .invite-title,
+      body.launch-animate .center-card {
+        animation: none;
+        transform: none;
+      }
+
+      .event-info-line.is-urgent.attention-shake {
+        animation: none;
+      }
+
+      .venue-link.is-flashing {
+        animation: none;
+      }
+    }
+
+    .hero-logo {
+      display: block;
+      width: min(260px, 70%);
+      margin: 0 auto 20px;
+      filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.5));
+    }
+
+    /* ── BOTTOM RED BAND ── */
+    .poster-bottom {
+      background: var(--red);
+      padding: 36px 32px 28px;
+      text-align: center;
+      position: relative;
+    }
+
+    .poster-bottom::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20px; right: 20px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .date-time {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      color: var(--cream);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .date-time .divider {
+      width: 3px;
+      height: 36px;
+      background: var(--yellow);
+      flex-shrink: 0;
+    }
+
+    .event-info-line {
+      font-family: var(--font-display);
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      color: var(--yellow);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .event-info-line.is-urgent {
+      display: inline-block;
+      transform-origin: 50% 50%;
+    }
+
+    .event-info-line.is-urgent.attention-shake {
+      animation: urgent-shake 4.7s ease-in-out infinite;
+    }
+
+    @keyframes urgent-shake {
+      0%, 14.9%, 100% { transform: translateX(0) rotate(0deg); }
+      1.5% { transform: translateX(-3px) rotate(-1.4deg); }
+      3% { transform: translateX(4px) rotate(1.6deg); }
+      4.5% { transform: translateX(-5px) rotate(-1.8deg); }
+      6% { transform: translateX(5px) rotate(1.4deg); }
+      7.5% { transform: translateX(-4px) rotate(-1.1deg); }
+      9% { transform: translateX(3px) rotate(0.9deg); }
+      10.5% { transform: translateX(-2px) rotate(-0.7deg); }
+      12% { transform: translateX(2px) rotate(0.5deg); }
+      13.5% { transform: translateX(-1px) rotate(-0.25deg); }
+    }
+
+    .event-info-desc {
+      font-family: var(--font-display);
+      font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── VENUE BAR ── */
+    .venue-bar {
+      background: var(--dark);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .venue-bar .venue-name {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--yellow);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+    }
+
+    .venue-bar .venue-address {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .venue-bar .venue-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--yellow);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border: 1px solid var(--yellow);
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .venue-bar .venue-link:hover {
+      background: var(--yellow);
+      color: var(--dark);
+    }
+
+    .venue-bar .venue-link.is-flashing {
+      animation: map-flash 1.15s ease-in-out infinite;
+    }
+
+    @keyframes map-flash {
+      0%, 100% {
+        background: transparent;
+        color: var(--yellow);
+        box-shadow: 0 0 0 rgba(240,200,32,0);
+      }
+      50% {
+        background: rgba(240,200,32,0.22);
+        color: var(--cream);
+        box-shadow: 0 0 0 4px rgba(240,200,32,0.14);
+      }
+    }
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      background: linear-gradient(135deg, var(--green) 0%, #226622 100%);
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .manifesto::before,
+    .manifesto::after {
+      content: '';
+      position: absolute;
+      left: 20px; right: 20px;
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .manifesto::before { top: 0; }
+    .manifesto::after { bottom: 0; }
+
+    .manifesto-text {
+      font-family: var(--font-body);
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--cream);
+    }
+
+    .manifesto-char {
+      color: #8a8d85;
+      transition: color 0.14s linear;
+    }
+
+    .manifesto-char.active {
+      color: var(--char-color, #f7f7f2);
+    }
+
+    .manifesto-text .hl {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    /* ── ABOUT SECTION ── */
+    .about-section {
+      background: var(--dark);
+      padding: 36px 28px;
+    }
+
+    .about-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--yellow);
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .about-body {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .about-body strong { color: var(--cream); font-weight: 500; }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      background: rgba(240,200,32,0.1);
+      border: 1px solid rgba(240,200,32,0.3);
+      color: var(--yellow);
+      font-size: 0.75rem;
+      padding: 5px 12px;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── EVENT DETAILS ── */
+    .details-section {
+      background: linear-gradient(180deg, #1e274d 0%, #131a32 100%);
+      padding: 36px 28px;
+    }
+
+    .details-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--yellow);
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+      margin-bottom: 24px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .details-block + .details-block {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .details-label {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--yellow);
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .details-list,
+    .notes-list,
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .details-list strong,
+    .notes-list strong,
+    .contact-list strong {
+      color: var(--cream);
+      font-weight: 500;
+    }
+
+    .contact-list a {
+      color: var(--yellow);
+      text-decoration: none;
+    }
+
+    .contact-list a:hover { text-decoration: underline; }
+
+    /* ── PAGE STACK (all cards float on wallpaper) ── */
+    .form-stack {
+      max-width: 720px;
+      margin: 175px auto;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-card {
+      background: #293a80;
+      padding: 32px 24px;
+      position: relative;
+    }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--yellow);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .form-subtitle {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      margin-bottom: 28px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── FORM FIELDS ── */
+    .fields { display: flex; flex-direction: column; gap: 16px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--yellow);
+      letter-spacing: 0.08em;
+    }
+
+    label .req { color: #ff6b6b; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      background: rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+
+    textarea {
+      min-height: 104px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder { color: rgba(255,255,255,0.25); }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--yellow);
+      box-shadow: 0 0 0 3px rgba(240,200,32,0.15);
+    }
+
+    .field-help {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.6;
+    }
+
+    .field-help strong { color: var(--cream); font-weight: 500; }
+
+    .field-help a {
+      color: var(--yellow);
+      text-decoration: none;
+    }
+
+    .field-help a:hover { text-decoration: underline; }
+
+    .form-section-heading {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--yellow);
+      letter-spacing: 0.05em;
+    }
+
+    .form-section-heading:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    /* ── RADIO GROUP ── */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 12px 14px;
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      background: rgba(0,0,0,0.25);
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+
+    .radio-option:has(input:checked) {
+      border-color: var(--yellow);
+      background: rgba(240,200,32,0.08);
+    }
+
+    .radio-option input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      min-width: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      background: transparent;
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s;
+    }
+
+    .radio-option input[type="radio"]:checked { border-color: var(--yellow); }
+
+    .radio-option input[type="radio"]::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 8px; height: 8px;
+      background: var(--yellow);
+      border-radius: 50%;
+      transition: transform 0.15s;
+    }
+
+    .radio-option input[type="radio"]:checked::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .radio-label { font-size: 0.95rem; color: var(--cream); }
+
+    /* ── CHECKBOX ── */
+    .check-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      padding: 12px 14px;
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      background: rgba(0,0,0,0.25);
+      transition: border-color 0.2s;
+      user-select: none;
+    }
+
+    .check-option:has(input:checked) { border-color: var(--yellow); }
+
+    .check-option input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      min-width: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 3px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      margin-top: 1px;
+      padding: 0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .check-option input[type="checkbox"]:checked {
+      border-color: var(--yellow);
+      background: var(--yellow);
+    }
+
+    .check-option input[type="checkbox"]::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 5px;
+      width: 6px; height: 10px;
+      border: 2px solid var(--dark);
+      border-top: none; border-left: none;
+      transform: rotate(45deg) scale(0);
+      transition: transform 0.15s;
+    }
+
+    .check-option input[type="checkbox"]:checked::after {
+      transform: rotate(45deg) scale(1);
+    }
+
+    .check-label {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.55;
+    }
+
+    .check-label strong { color: var(--cream); font-weight: 500; }
+
+    /* ── FIELD ERRORS ── */
+    .field-error {
+      font-size: 0.75rem;
+      color: #ff6b6b;
+      display: none;
+    }
+
+    .field.has-error input,
+    .field.has-error textarea,
+    .field.has-error .radio-group,
+    .field.has-error .check-option {
+      border-color: #ff4444 !important;
+    }
+
+    .field.has-error .field-error { display: block; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      margin-top: 8px;
+      background: var(--yellow);
+      color: var(--dark);
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      padding: 16px 32px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 3px 0 #b8a010, 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .btn-submit:hover { background: var(--yellow-lt); }
+    .btn-submit:active { transform: translateY(2px); box-shadow: 0 1px 0 #b8a010; }
+    .btn-submit:disabled { background: #665a20; color: #998f40; cursor: not-allowed; box-shadow: none; }
+
+    .btn-text { transition: opacity 0.2s; }
+    .btn-loading {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+
+    .btn-submit.loading .btn-text { opacity: 0; }
+    .btn-submit.loading .btn-loading { opacity: 1; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: var(--dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ERROR BANNER ── */
+    .error-banner {
+      display: none;
+      background: rgba(255,50,50,0.12);
+      border: 2px solid rgba(255,50,50,0.3);
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #ff8080;
+      margin-bottom: 14px;
+    }
+
+    .error-banner.visible { display: block; }
+
+    /* ── SUCCESS ── */
+    #successPanel {
+      text-align: center;
+      padding: 48px 20px;
+    }
+
+    #successPanel h3 {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      color: var(--yellow);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      margin-bottom: 12px;
+    }
+
+    #successPanel p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .form-stack { animation: fade-in 0.6s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 760px) {
+      .form-stack { margin: 100px auto; }
+      .poster-hero { padding: 28px 20px 20px; }
+      .poster-bottom { padding: 28px 20px 20px; }
+      .form-card { padding: 24px 18px; }
+      .center-card {
+        width: min(320px, 88%);
+        max-width: 320px;
+        margin: -52px auto 6px;
+        padding: 0;
+      }
+      .date-time { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── POSTER WALLPAPER ── -->
+<div class="wallpaper" aria-hidden="true"></div>
+<script>
+  function renderWallpaper() {
+    const wall = document.querySelector('.wallpaper');
+    if (!wall) return;
+    const srcs = ['posters/poster-1.png','posters/poster-2.png','posters/poster-3.png','posters/poster-4.png'];
+    const idealTileWidth = window.innerWidth <= 760 ? 104 : 125;
+    const cols = Math.max(1, Math.ceil(window.innerWidth / idealTileWidth));
+    const tileH = Math.round((window.innerWidth / cols) * 1.4);
+    const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+    wall.innerHTML = '';
+    wall.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+    wall.style.gridAutoRows = tileH + 'px';
+    wall.style.height = pageH + 'px';
+    const rows = Math.ceil(pageH / tileH) + 1;
+    const total = cols * rows;
+
+    for (let i = 0; i < total; i++) {
+      const img = document.createElement('img');
+      img.src = srcs[i % 4];
+      img.alt = '';
+      wall.appendChild(img);
+    }
+  }
+
+  function injectCornerBalls() {
+    // Inject corner balls into each card frame
+    const ballSvg = '<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a1a18" stroke="#f0c820" stroke-width="2"/><circle cx="16" cy="16" r="6" stroke="#f0c820" stroke-width="1" fill="none"/><line x1="16" y1="2" x2="16" y2="10" stroke="#f0c820" stroke-width="1"/><line x1="16" y1="22" x2="16" y2="30" stroke="#f0c820" stroke-width="1"/><line x1="2" y1="16" x2="10" y2="16" stroke="#f0c820" stroke-width="1"/><line x1="22" y1="16" x2="30" y2="16" stroke="#f0c820" stroke-width="1"/></svg>';
+    document.querySelectorAll('.card-frame').forEach(frame => {
+      if (frame.querySelector('.corner-ball')) return;
+      ['tl','tr','bl','br'].forEach(pos => {
+        const b = document.createElement('div');
+        b.className = 'corner-ball ' + pos;
+        b.innerHTML = ballSvg;
+        frame.appendChild(b);
+      });
+    });
+  }
+
+  function setupInviteTitleTexture() {
+    const title = document.querySelector('.invite-title');
+    if (!title || title.querySelector('.invite-char')) return;
+
+    const wrapNode = node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const fragment = document.createDocumentFragment();
+
+        Array.from(node.textContent || '').forEach(char => {
+          if (char === '\n') return;
+
+          const span = document.createElement('span');
+          span.className = 'invite-char';
+          span.textContent = char === ' ' ? '\u00A0' : char;
+          fragment.appendChild(span);
+        });
+
+        return fragment;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return document.createDocumentFragment();
+      }
+
+      if (node.tagName === 'BR') {
+        return document.createElement('br');
+      }
+
+      const clone = node.cloneNode(false);
+      Array.from(node.childNodes).forEach(child => {
+        clone.appendChild(wrapNode(child));
+      });
+      return clone;
+    };
+
+    const fragment = document.createDocumentFragment();
+    Array.from(title.childNodes).forEach(node => {
+      fragment.appendChild(wrapNode(node));
+    });
+
+    title.innerHTML = '';
+    title.appendChild(fragment);
+  }
+
+  function setupManifestoScrollFill() {
+    const manifesto = document.querySelector('.manifesto-text');
+    if (!manifesto) return;
+
+    const segmentText = text => {
+      if ('Segmenter' in Intl) {
+        return Array.from(new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(text), part => part.segment);
+      }
+
+      return Array.from(text);
+    };
+
+    const wrapNode = (node, color) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const fragment = document.createDocumentFragment();
+
+        segmentText(node.textContent || '').forEach(char => {
+          const span = document.createElement('span');
+          span.className = 'manifesto-char';
+          span.style.setProperty('--char-color', color);
+          span.textContent = char;
+          fragment.appendChild(span);
+        });
+
+        return fragment;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) return document.createDocumentFragment();
+
+      if (node.tagName === 'BR') return document.createElement('br');
+
+      const nextColor = node.classList.contains('hl') ? 'var(--yellow)' : color;
+      const clone = node.cloneNode(false);
+      Array.from(node.childNodes).forEach(child => {
+        clone.appendChild(wrapNode(child, nextColor));
+      });
+      return clone;
+    };
+
+    const originalNodes = Array.from(manifesto.childNodes);
+    manifesto.innerHTML = '';
+    originalNodes.forEach(node => {
+      manifesto.appendChild(wrapNode(node, '#f7f7f2'));
+    });
+
+    const chars = Array.from(manifesto.querySelectorAll('.manifesto-char'));
+    if (!chars.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      chars.forEach(char => char.classList.add('active'));
+      return;
+    }
+
+    let lastActiveCount = -1;
+    let ticking = false;
+
+    const render = () => {
+      const rect = manifesto.getBoundingClientRect();
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const start = viewportH * 0.88;
+      const end = viewportH * 0.28;
+      const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+      const activeCount = Math.round(progress * chars.length);
+
+      if (activeCount !== lastActiveCount) {
+        chars.forEach((char, index) => {
+          char.classList.toggle('active', index < activeCount);
+        });
+        lastActiveCount = activeCount;
+      }
+
+      ticking = false;
+    };
+
+    const queueRender = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(render);
+    };
+
+    render();
+    window.addEventListener('scroll', queueRender, { passive: true });
+    window.addEventListener('resize', queueRender);
+  }
+
+  window.addEventListener('load', function() {
+    renderWallpaper();
+    injectCornerBalls();
+    setupInviteTitleTexture();
+    document.body.classList.add('launch-animate');
+    setupManifestoScrollFill();
+  });
+
+  window.addEventListener('resize', renderWallpaper);
+</script>
+
+<!-- ── PAGE STACK — all cards float on wallpaper ── -->
+<div class="form-stack">
+
+  <!-- HERO -->
+  <div class="card-frame">
+    <div class="poster-hero">
+      <h1 class="invite-title">
+        <span class="invite-line invite-line-small">YOU'VE BEEN</span>
+        <span class="invite-line invite-line-large">INVITED</span>
+      </h1>
+      <div class="center-card">
+        <img src="logos/sticker-yellow-transparent.png" alt="Ladderice อินเตอร์ เดอะ สแตนด์" class="card-logo" />
+      </div>
+    </div>
+  </div>
+
+  <!-- DATE / DRESS CODE -->
+  <div class="card-frame">
+    <div class="poster-bottom">
+      <div class="date-time">
+        <span>13 มี.ค.</span>
+        <span class="divider"></span>
+        <span>19:00 น.</span>
+      </div>
+      <p class="event-info-line is-urgent attention-shake">DOORS CLOSES @ 18:45 น.</p>
+      <p class="event-info-desc">
+        DRESS CODE: MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK.<br/>
+        LET YOUR IMAGINATION RUN WILD.
+      </p>
+    </div>
+  </div>
+
+  <!-- VENUE -->
+  <div class="card-frame">
+    <div class="venue-bar">
+      <div class="venue-name">BAAN SAEN SAEP</div>
+      <div class="venue-address">20 2 Rama I Rd, Wang Mai,<br/>Pathum Wan, Bangkok 10330</div>
+      <a class="venue-link is-flashing" href="https://maps.app.goo.gl/aJ6GtWL9hZsQ6NSa6?g_st=i" target="_blank" rel="noopener">
+        &#x1F4CD; OPEN IN GOOGLE MAPS
+      </a>
+    </div>
+  </div>
+
+  <!-- MANIFESTO -->
+  <div class="card-frame">
+    <div class="manifesto">
+      <p class="manifesto-text">
+        "แม้ฟุตบอลไทยจะยังไม่ได้ไปฟุตบอลโลก<br/>
+        แต่<span class="hl">แฟชั่นไทยจะบอลโลกได้</span>"
+      </p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="card-frame">
+    <div class="about-section">
+      <h2>ABOUT THE EVENT</h2>
+      <p class="about-body">
+        ร้าน <strong>Ladderice</strong> แบรนด์แฟชั่นฟุตบอลไลฟ์สไตล์
+        จับมือกับ <strong>Thunder</strong> ครีเอเตอร์สายสตรีทแฟชั่น
+        ผู้เป็นผู้นำเทรนด์ของคนรุ่น Gen Z จากทั่วโลกสู่ประเทศไทย
+        และ <strong>ธีรพล สีสังข์</strong> ศิลปินร่วมสมัยรุ่นใหม่ผู้มีชื่อเสียง
+        โดดเด่นด้านการสร้างสรรค์ประติมากรรมจากการถักโลหะอย่างประณีต
+        ร่วมกันจัดงาน Jersey Fashion Show: LADDERICE UNDER THE STANDS
+        ภายใต้คอนเซ็ปต์ <strong>"ปาร์ตี้ใต้อัฒจันทร์"</strong>
+      </p>
+      <p class="about-body">
+        แฟชั่นโชว์ครั้งนี้เป็นการผสมผสานระหว่างโลกของฟุตบอลและความเป็นไทยอย่างร่วมสมัย
+        ไม่ว่าจะเป็นการนำ <strong>ผ้าไทย เครื่องประดับไทย และศิลปะไทย</strong>
+        มาตีความใหม่ผ่านการออกแบบและการนำเสนอผลงานบนรันเวย์
+        ในมุมมองของฟุตบอลและแฟชั่นร่วมสมัย
+        นอกจากนี้ยังมีแนวคิดในการถ่ายทอดความเป็นไทยในหลากหลายมิติ
+        เพื่อสร้างประสบการณ์ใหม่ที่สะท้อนอัตลักษณ์ไทยในรูปแบบร่วมสมัย
+        และทำให้วัฒนธรรมไทยสามารถเข้าถึงกลุ่มคนรุ่นใหม่ได้มากยิ่งขึ้น
+      </p>
+      <div class="about-tags">
+        <span class="tag">ดนตรี</span>
+        <span class="tag">ศิลปะ</span>
+        <span class="tag">ผ้าไทย</span>
+        <span class="tag">เครื่องประดับ</span>
+        <span class="tag">อาหาร</span>
+        <span class="tag">FASHION</span>
+        <span class="tag">FOOTBALL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT DETAILS -->
+  <div class="card-frame">
+    <div class="details-section">
+      <h2>EVENT DETAILS</h2>
+
+      <div class="details-block">
+        <div class="details-label">SCHEDULE</div>
+        <ul class="details-list">
+          <li><strong>18:00 น.</strong> เปิดลงทะเบียนเข้างาน</li>
+          <li><strong>18:45 น.</strong> ประตูปิด</li>
+          <li><strong>19:00 น.</strong> รันเวย์โชว์ภายใต้แนวคิด "แม้ฟุตบอลไทยไม่ได้ไปบอลโลก แต่แฟชั่นไทยจะไปบอลโลก"</li>
+          <li><strong>21:00 น.</strong> การแสดงสุดเอ็กซ์คลูซีฟจากศิลปินรับเชิญ</li>
+          <li><strong>22:00 น.</strong> ปาร์ตี้ใต้อัฒจันทร์ (After Party)</li>
+        </ul>
+      </div>
+
+      <div class="details-block">
+        <div class="details-label">NOTES</div>
+        <ul class="notes-list">
+          <li>โปรดเผื่อเวลาเดินทางอย่างน้อย <strong>1 ชั่วโมง</strong> เนื่องจากสถานที่จัดงานอยู่ในย่านใจกลางเมือง</li>
+          <li>การเข้าร่วมงานสงวนสิทธิ์เฉพาะผู้ที่ได้รับบัตรเชิญเท่านั้น</li>
+          <li>สถานที่จัดงานมีที่จอดรถจำกัด แนะนำให้เดินทางด้วยรถสาธารณะหรือเรียกรถผ่านแอป</li>
+        </ul>
+      </div>
+
+      <div class="details-block">
+        <div class="details-label">CONTACT</div>
+        <ul class="contact-list">
+          <li><strong>Tel.</strong> 095-503-2478 (K. ปิ่น)</li>
+          <li><strong>Email</strong> <a href="mailto:Pattarawadee@turfmapp.com">Pattarawadee@turfmapp.com</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS CARD (hidden until submission) -->
+  <div class="card-frame" id="successFrame" style="display:none">
+    <div class="form-card" id="successPanel">
+      <h3 id="successTitle">SEE YOU THERE!</h3>
+      <p id="successMessage">
+        ได้รับการยืนยันการเข้าร่วมของท่านแล้ว<br/>
+        Online Invitation Card จะถูกส่งไปยัง<br/>
+        อีเมลที่ท่านให้ไว้
+      </p>
+    </div>
+  </div>
+
+  <form id="rsvpForm" novalidate>
+    <div class="card-frame">
+      <div class="form-card">
+
+      <div class="form-title">RSVP</div>
+      <div class="form-subtitle">กรอกข้อมูลตอบรับเข้าร่วมงาน</div>
+
+      <div class="error-banner" id="errorBanner">
+        เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง หรือติดต่อเราทาง Instagram @ladderice
+      </div>
+
+      <div class="fields">
+
+        <div class="form-section-heading">ข้อมูลส่วนตัว</div>
+
+        <div class="field" id="field-name">
+          <label for="name">ชื่อ-นามสกุล ภาษาอังกฤษ ที่ต้องการใช้แสดงบน Online Invitation Card <span class="req">*</span></label>
+          <input type="text" id="name" placeholder="ตามที่จะปรากฏบนบัตรเชิญ" autocomplete="name" />
+          <span class="field-error">กรุณากรอกชื่อ-นามสกุลภาษาอังกฤษ</span>
+        </div>
+
+        <div class="field" id="field-phone">
+          <label for="phone">เบอร์โทรศัพท์ <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="เช่น 081-234-5678" autocomplete="tel" />
+          <span class="field-error">กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง</span>
+        </div>
+
+        <div class="field" id="field-email">
+          <label for="email">Email เพื่อรับ Online Invitation Card <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
+          <span class="field-error">กรุณากรอกอีเมลที่ถูกต้อง</span>
+        </div>
+
+        <div class="field" id="field-social">
+          <label for="social">ช่องทาง Social Media ของท่าน (ระบุได้มากกว่า 1 ช่องทาง) <span class="req">*</span></label>
+          <span class="field-help">เช่น IG: XXX | FB: YYY | TikTok: ZZZ</span>
+          <textarea id="social" placeholder="IG: @username | FB: Your Name | TikTok: @username"></textarea>
+          <span class="field-error">กรุณากรอก Social Media ของท่าน</span>
+        </div>
+
+        <div class="form-section-heading">การยืนยันเข้าร่วมงาน</div>
+
+        <div class="field" id="field-attendance">
+          <label>การยืนยันเข้าร่วมงาน <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="attendance" value="ยืนยันการเข้าร่วม" />
+              <span class="radio-label">ยืนยันการเข้าร่วม</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="attendance" value="ปฏิเสธการเข้าร่วม" />
+              <span class="radio-label">ปฏิเสธการเข้าร่วม</span>
+            </label>
+          </div>
+          <span class="field-error">กรุณาเลือกการยืนยันเข้าร่วมงาน</span>
+        </div>
+
+        <div class="field" id="field-pdpa">
+          <label>PDPA และการบันทึกภาพ <span class="req">*</span></label>
+          <span class="field-help">
+            ขอเรียนแจ้งให้ทราบว่า ในงานนี้จะมีการถ่ายภาพและบันทึกวิดีโอเพื่อใช้ในการประชาสัมพันธ์งาน
+            เมื่อท่านลงทะเบียนยืนยันการเข้าร่วมงาน ถือว่าท่านได้ให้ความยินยอมตามกฎหมาย PDPA
+            กรุณากดยืนยันว่าท่านรับทราบข้อตกลงดังกล่าว
+          </span>
+          <label class="check-option">
+            <input type="checkbox" id="pdpa" />
+            <span class="check-label"><strong>รับทราบ</strong></span>
+          </label>
+          <span class="field-error">กรุณายืนยันการยินยอม PDPA เพื่อเข้าร่วมงาน</span>
+        </div>
+
+        <div class="field" id="field-share">
+          <label>การแชร์บน Social Media <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
+          <span class="field-help">
+            หากท่านช่วยโพสต์ Online Invitation Card ที่เราจะส่งให้หลังจากท่านกรอกฟอร์มนี้ รวมถึงคอนเทนต์ระหว่างงาน
+            กดติดตามและแท็ก <strong>@ladderice</strong> ที่
+            <a href="https://www.instagram.com/ladderice/" target="_blank" rel="noopener">instagram.com/ladderice</a>
+            พร้อมติดแฮชแท็ก <strong>#LaddericeUndertheStands</strong>
+          </span>
+          <label class="check-option">
+            <input type="checkbox" id="share" />
+            <span class="check-label"><strong>รับทราบ</strong></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="btn-text">ส่งคำตอบ</span>
+          <span class="btn-loading">
+            <span class="spinner"></span>
+            กำลังส่ง...
+          </span>
+        </button>
+
+      </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSdAAFTgBhpO98nWozC2xGW3T1vSr7zj8x_ZF4yJunPdrI-x_w/formResponse';
+
+  const ENTRY = {
+    name:       'entry.419821654',
+    phone:      'entry.414841819',
+    email:      'entry.172170408',
+    social:     'entry.1312231183',
+    attendance: 'entry.381214908',
+    pdpa:       'entry.1050161389',
+    share:      'entry.1221166441',
+  };
+
+  function clearError(id) {
+    document.getElementById('field-' + id)?.classList.remove('has-error');
+  }
+
+  ['name','phone','email','social'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => clearError(id));
+  });
+
+  document.querySelectorAll('input[name="attendance"]').forEach(r => {
+    r.addEventListener('change', () => clearError('attendance'));
+  });
+
+  document.getElementById('pdpa').addEventListener('change', () => clearError('pdpa'));
+
+  function validate() {
+    let valid = true;
+    const set = (id, test) => {
+      if (!test) {
+        document.getElementById('field-' + id).classList.add('has-error');
+        valid = false;
+      }
+    };
+
+    set('name',   document.getElementById('name').value.trim().length > 1);
+    set('phone',  document.getElementById('phone').value.trim().length > 5);
+    set('email',  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim()));
+    set('social', document.getElementById('social').value.trim().length > 1);
+    set('attendance', !!document.querySelector('input[name="attendance"]:checked'));
+    set('pdpa',   document.getElementById('pdpa').checked);
+
+    return valid;
+  }
+
+  document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('errorBanner').classList.remove('visible');
+
+    if (!validate()) {
+      const first = document.querySelector('.has-error');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const selectedAttendance = document.querySelector('input[name="attendance"]:checked').value;
+    const fd = new FormData();
+    fd.append(ENTRY.name,       document.getElementById('name').value.trim());
+    fd.append(ENTRY.phone,      document.getElementById('phone').value.trim());
+    fd.append(ENTRY.email,      document.getElementById('email').value.trim());
+    fd.append(ENTRY.social,     document.getElementById('social').value.trim());
+    fd.append(ENTRY.attendance, selectedAttendance);
+    fd.append(ENTRY.pdpa,       document.getElementById('pdpa').checked ? 'รับทราบ' : '');
+    fd.append(ENTRY.share,      document.getElementById('share').checked ? 'รับทราบ' : '');
+
+    try {
+      await fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: fd });
+      if (selectedAttendance === 'ยืนยันการเข้าร่วม') {
+        document.getElementById('successTitle').textContent = 'SEE YOU THERE!';
+        document.getElementById('successMessage').innerHTML =
+          'ได้รับการยืนยันการเข้าร่วมของท่านแล้ว<br/>' +
+          'Online Invitation Card จะถูกส่งไปยัง<br/>' +
+          'อีเมลที่ท่านให้ไว้';
+      } else {
+        document.getElementById('successTitle').textContent = 'RESPONSE RECEIVED';
+        document.getElementById('successMessage').innerHTML =
+          'เราได้รับคำตอบของท่านเรียบร้อยแล้ว<br/>' +
+          'ขอบคุณที่แจ้งการตอบรับกลับมา';
+      }
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('successFrame').style.display = '';
+    } catch (err) {
+      console.error(err);
+      document.getElementById('errorBanner').classList.add('visible');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
