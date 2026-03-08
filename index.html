@@ -933,7 +933,7 @@
   function renderWallpaper() {
     const wall = document.querySelector('.wallpaper');
     if (!wall) return;
-    const srcs = ['posters/poster-1.png','posters/poster-2.png','posters/poster-3.png','posters/poster-4.png'];
+    const srcs = ['posters/poster-1.webp','posters/poster-2.webp','posters/poster-3.webp','posters/poster-4.webp'];
     const idealTileWidth = window.innerWidth <= 760 ? 104 : 125;
     const cols = Math.max(1, Math.ceil(window.innerWidth / idealTileWidth));
     const tileH = Math.round((window.innerWidth / cols) * 1.4);
@@ -944,12 +944,17 @@
     wall.style.gridAutoRows = tileH + 'px';
     wall.style.height = pageH + 'px';
     const rows = Math.ceil(pageH / tileH) + 1;
+    const eagerRows = Math.ceil((window.innerHeight || document.documentElement.clientHeight) / tileH) + 1;
+    const eagerCount = cols * eagerRows;
     const total = cols * rows;
 
     for (let i = 0; i < total; i++) {
       const img = document.createElement('img');
       img.src = srcs[i % 4];
       img.alt = '';
+      img.decoding = 'async';
+      img.loading = i < eagerCount ? 'eager' : 'lazy';
+      if (i >= eagerCount) img.fetchPriority = 'low';
       wall.appendChild(img);
     }
   }
