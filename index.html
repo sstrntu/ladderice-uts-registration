@@ -1342,17 +1342,23 @@
 </div>
 
 <script>
-  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSdAAFTgBhpO98nWozC2xGW3T1vSr7zj8x_ZF4yJunPdrI-x_w/formResponse';
+  const SHEET_ACTION = 'https://script.google.com/macros/s/AKfycbws-D6ZxAsptkozGVaS35-6UhLX6kpymP-HWWYQPe3AGJsybHBmK4CEnEaMXYfRQ1j4wQ/exec';
 
-  const ENTRY = {
-    name:       'entry.419821654',
-    phone:      'entry.414841819',
-    email:      'entry.172170408',
-    social:     'entry.1312231183',
-    attendance: 'entry.381214908',
-    pdpa:       'entry.1050161389',
-    share:      'entry.1221166441',
-  };
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  function resetToTop() {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  window.addEventListener('pageshow', resetToTop);
+  window.addEventListener('load', () => {
+    resetToTop();
+    window.setTimeout(resetToTop, 0);
+  });
 
   function clearError(id) {
     document.getElementById('field-' + id)?.classList.remove('has-error');
@@ -1402,17 +1408,23 @@
     btn.disabled = true;
 
     const selectedAttendance = document.querySelector('input[name="attendance"]:checked').value;
-    const fd = new FormData();
-    fd.append(ENTRY.name,       document.getElementById('name').value.trim());
-    fd.append(ENTRY.phone,      document.getElementById('phone').value.trim());
-    fd.append(ENTRY.email,      document.getElementById('email').value.trim());
-    fd.append(ENTRY.social,     document.getElementById('social').value.trim());
-    fd.append(ENTRY.attendance, selectedAttendance);
-    fd.append(ENTRY.pdpa,       document.getElementById('pdpa').checked ? 'รับทราบ' : '');
-    fd.append(ENTRY.share,      document.getElementById('share').checked ? 'รับทราบ' : '');
+    const payload = new URLSearchParams({
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      social: document.getElementById('social').value.trim(),
+      attendance: selectedAttendance,
+      pdpa: document.getElementById('pdpa').checked ? 'true' : 'false',
+      share: document.getElementById('share').checked ? 'true' : 'false',
+    });
 
     try {
-      await fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: fd });
+      await fetch(SHEET_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: payload.toString(),
+      });
       if (selectedAttendance === 'ยืนยันการเข้าร่วม') {
         document.getElementById('successTitle').textContent = 'SEE YOU THERE!';
         document.getElementById('successMessage').innerHTML =
@@ -1426,7 +1438,11 @@
           'ขอบคุณที่แจ้งการตอบรับกลับมา';
       }
       document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('successFrame').style.display = '';
+      const successFrame = document.getElementById('successFrame');
+      successFrame.style.display = '';
+      window.requestAnimationFrame(() => {
+        successFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     } catch (err) {
       console.error(err);
       document.getElementById('errorBanner').classList.add('visible');
