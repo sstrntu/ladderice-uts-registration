@@ -63,7 +63,7 @@
       background: var(--red);
       border-bottom: 3px solid var(--yellow);
       text-align: center;
-      padding: 10px 16px;
+      padding: 14px 16px;
       font-family: var(--font-display);
     }
 
@@ -112,6 +112,9 @@
 
     #countdown-bar.expired .countdown-label {
       color: #ffffff;
+      font-size: clamp(0.9rem, 2.6vw, 1.2rem);
+      letter-spacing: 0.14em;
+      margin-bottom: 0;
     }
 
     #countdown-bar.expired .countdown-expired-msg {
@@ -1211,6 +1214,36 @@
       line-height: 1.7;
     }
 
+    #closedPanel {
+      background: #293a80;
+      aspect-ratio: auto;
+      min-height: 0;
+      padding: 40px 24px 34px;
+      text-align: center;
+    }
+
+    #closedPanel h3 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 6vw, 3.2rem);
+      color: var(--yellow);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      margin-bottom: 14px;
+    }
+
+    #closedPanel p {
+      font-size: clamp(1.05rem, 2.5vw, 1.22rem);
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+    }
+
+    .closed-poster {
+      display: block;
+      width: min(100%, 420px);
+      margin: 22px auto 0;
+      border-radius: 6px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
+
     /* ── ANIMATIONS ── */
     @keyframes fade-in {
       from { opacity: 0; }
@@ -1379,6 +1412,11 @@
         aspect-ratio: auto;
         min-height: 1400px;
         padding: 98px 40px 72px;
+      }
+
+      #closedPanel {
+        min-height: 0;
+        padding: 34px 20px 28px;
       }
     }
   </style>
@@ -1622,29 +1660,8 @@
 </script>
 
 <!-- ── COUNTDOWN BAR ── -->
-<div id="countdown-bar">
-  <div class="countdown-label">RSVP CLOSES IN</div>
-  <div class="countdown-units">
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-days">00</span>
-      <span class="countdown-unit-label">DAYS</span>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-hours">00</span>
-      <span class="countdown-unit-label">HRS</span>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-mins">00</span>
-      <span class="countdown-unit-label">MIN</span>
-    </div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-secs">00</span>
-      <span class="countdown-unit-label">SEC</span>
-    </div>
-  </div>
+<div id="countdown-bar" class="expired">
+  <div class="countdown-label">RSVP CLOSED</div>
 </div>
 
 <!-- ── PAGE STACK — all cards float on wallpaper ── -->
@@ -1769,171 +1786,26 @@
     </div>
   </div>
 
-  <!-- SUCCESS CARD (hidden until submission) -->
-  <div class="card-frame" id="successFrame" style="display:none">
-    <div class="form-card" id="successPanel">
-      <h3 id="successTitle">SEE YOU THERE!</h3>
-      <p id="successMessage">
-        ได้รับการยืนยันการเข้าร่วมของท่านแล้ว<br/>
-        Online Invitation Card จะถูกส่งไปยัง<br/>
-        อีเมลที่ท่านให้ไว้
+  <div class="card-frame" id="rsvp-card">
+    <div class="form-card" id="closedPanel">
+      <h3>CLOSED</h3>
+      <p>
+        RSVP ปิดรับลงทะเบียนแล้ว<br/>
+        ขอบคุณสำหรับความสนใจในงานครั้งนี้
       </p>
+      <img src="posters/rsvp-closed-poster.png" alt="Ladderice Under The Stands poster" class="closed-poster" />
     </div>
   </div>
-
-  <form id="rsvpForm" novalidate>
-    <div class="card-frame" id="rsvp-card">
-      <div class="form-card">
-
-      <div class="form-title">RSVP</div>
-      <div class="form-subtitle">กรอกข้อมูลตอบรับเข้าร่วมงาน</div>
-
-      <div class="error-banner" id="errorBanner">
-        เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง หรือติดต่อเราทาง Instagram @ladderice
-      </div>
-
-      <div class="fields">
-
-        <div class="form-section-heading">ข้อมูลส่วนตัว</div>
-
-        <div class="field" id="field-name">
-          <label for="name">ชื่อ-นามสกุล ภาษาอังกฤษ <span class="req">*</span></label>
-          <input type="text" id="name" placeholder="ตามที่จะปรากฏบนบัตรเชิญ" autocomplete="name" />
-          <span class="field-error">กรุณากรอกชื่อ-นามสกุลภาษาอังกฤษ</span>
-        </div>
-
-        <div class="field" id="field-nickname">
-          <label for="nickname">ชื่อเล่น <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
-          <input type="text" id="nickname" placeholder="ชื่อเล่นของท่าน" autocomplete="nickname" />
-        </div>
-
-        <div class="field" id="field-card-name">
-          <label for="card-name">ชื่อที่ต้องการให้แสดงบน Invitation Card <span class="req">*</span></label>
-          <span class="field-help">ระบุได้สูงสุด 10 ตัวอักษร (ตัวอักษรภาษาอังกฤษหรือชื่อเล่น)</span>
-          <input type="text" id="card-name" placeholder="เช่น John" maxlength="10" />
-          <span class="field-error">กรุณากรอกชื่อสำหรับ Invitation Card (สูงสุด 10 ตัวอักษร)</span>
-        </div>
-
-        <div class="field" id="field-organization">
-          <label for="organization">องค์กร / บริษัท / สถาบัน <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
-          <input type="text" id="organization" placeholder="ชื่อองค์กรหรือสถาบันของท่าน" autocomplete="organization" />
-        </div>
-
-        <div class="field" id="field-phone">
-          <label for="phone">เบอร์โทรศัพท์ <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="เช่น 081-234-5678" autocomplete="tel" />
-          <span class="field-error">กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง</span>
-        </div>
-
-        <div class="field" id="field-email">
-          <label for="email">Email เพื่อรับ Online Invitation Card <span class="req">*</span></label>
-          <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
-          <span class="field-error">กรุณากรอกอีเมลที่ถูกต้อง</span>
-        </div>
-
-        <div class="field" id="field-social">
-          <label for="social">ช่องทาง Social Media ของท่าน (ระบุได้มากกว่า 1 ช่องทาง) <span class="req">*</span></label>
-          <span class="field-help">เช่น IG: XXX | FB: YYY | TikTok: ZZZ</span>
-          <textarea id="social" placeholder="IG: @username | FB: Your Name | TikTok: @username"></textarea>
-          <span class="field-error">กรุณากรอก Social Media ของท่าน</span>
-        </div>
-
-        <!-- Honeypot: visually hidden, real users never see or fill this -->
-        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
-          <label for="website">Website (leave blank)</label>
-          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
-        </div>
-
-        <div class="form-section-heading">การยืนยันเข้าร่วมงาน</div>
-
-        <div class="field" id="field-attendance">
-          <label>การยืนยันเข้าร่วมงาน <span class="req">*</span></label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="attendance" value="ยืนยันการเข้าร่วม" />
-              <span class="radio-label">ยืนยันการเข้าร่วม</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="attendance" value="ปฏิเสธการเข้าร่วม" />
-              <span class="radio-label">ปฏิเสธการเข้าร่วม</span>
-            </label>
-          </div>
-          <span class="field-error">กรุณาเลือกการยืนยันเข้าร่วมงาน</span>
-        </div>
-
-        <div class="field" id="field-pdpa">
-          <label>PDPA และการบันทึกภาพ <span class="req">*</span></label>
-          <span class="field-help">
-            ขอเรียนแจ้งให้ทราบว่า ในงานนี้จะมีการถ่ายภาพและบันทึกวิดีโอเพื่อใช้ในการประชาสัมพันธ์งาน
-            เมื่อท่านลงทะเบียนยืนยันการเข้าร่วมงาน ถือว่าท่านได้ให้ความยินยอมตามกฎหมาย PDPA
-            กรุณากดยืนยันว่าท่านรับทราบข้อตกลงดังกล่าว
-          </span>
-          <label class="check-option">
-            <input type="checkbox" id="pdpa" />
-            <span class="check-label"><strong>รับทราบ</strong></span>
-          </label>
-          <span class="field-error">กรุณายืนยันการยินยอม PDPA เพื่อเข้าร่วมงาน</span>
-        </div>
-
-        <div class="field" id="field-share">
-          <label>การแชร์บน Social Media <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
-          <span class="field-help">
-            หากท่านช่วยโพสต์ Online Invitation Card ที่เราจะส่งให้หลังจากท่านกรอกฟอร์มนี้ รวมถึงคอนเทนต์ระหว่างงาน
-            กดติดตามและแท็ก <strong>@ladderice</strong> ที่
-            <a href="https://www.instagram.com/ladderice/" target="_blank" rel="noopener">instagram.com/ladderice</a>
-            พร้อมติดแฮชแท็ก <strong>#LaddericeUndertheStands</strong> และ <strong>#Laddericebkk</strong>
-          </span>
-          <label class="check-option">
-            <input type="checkbox" id="share" />
-            <span class="check-label"><strong>รับทราบ</strong></span>
-          </label>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
-          <span class="btn-text">ส่งคำตอบ</span>
-          <span class="btn-loading">
-            <span class="spinner"></span>
-            กำลังส่ง...
-          </span>
-        </button>
-
-      </div>
-      </div>
-    </div>
-  </form>
 </div>
 
 <script>
-  // ── COUNTDOWN TIMER (March 10 2026, 10:00 AM BKK = UTC+7) ──
+  // ── CLOSED STATE BANNER ──
   (function() {
-    const TARGET = new Date('2026-03-10T03:00:00Z');
-    const pad = n => String(n).padStart(2, '0');
-    function tick() {
-      const diff = TARGET - Date.now();
-      const bar = document.getElementById('countdown-bar');
-      if (diff <= 0) {
-        bar.classList.add('expired');
-        bar.innerHTML = '<div class="countdown-label">RSVP CLOSED</div>';
-        return;
-      }
-      const days  = Math.floor(diff / 86400000);
-      const hours = Math.floor((diff % 86400000) / 3600000);
-      const mins  = Math.floor((diff % 3600000)  / 60000);
-      const secs  = Math.floor((diff % 60000)    / 1000);
-      document.getElementById('cd-days').textContent  = pad(days);
-      document.getElementById('cd-hours').textContent = pad(hours);
-      document.getElementById('cd-mins').textContent  = pad(mins);
-      document.getElementById('cd-secs').textContent  = pad(secs);
-    }
-    tick();
-    setInterval(tick, 1000);
+    const bar = document.getElementById('countdown-bar');
+    if (!bar) return;
+    bar.classList.add('expired');
+    bar.innerHTML = '<div class="countdown-label">RSVP CLOSED</div>';
   })();
-
-  const SHEET_ACTION_BY_HOST = {
-    'uts-rsvp.ladderice.co': 'https://script.google.com/macros/s/AKfycbwX4n2JsWAcjZrmv0pAGYMiOn2HQulE18DwoFFeasUKO7rRTit6sHy0lNy7nQYDJ3ORLw/exec',
-    'uts-rsvp-thunder.ladderice.co': 'https://script.google.com/macros/s/AKfycbw1nADQjlGrjNdngXh0jdnXaxkEdbs4PGl9yS_LSoBO9yQm9HBA1RX-BjaOglfSb3Hr0g/exec',
-  };
-  const SHEET_ACTION = SHEET_ACTION_BY_HOST[location.hostname] || SHEET_ACTION_BY_HOST['uts-rsvp.ladderice.co'];
 
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
@@ -1949,108 +1821,6 @@
   window.addEventListener('load', () => {
     resetToTop();
     window.setTimeout(resetToTop, 0);
-  });
-
-  function clearError(id) {
-    document.getElementById('field-' + id)?.classList.remove('has-error');
-  }
-
-  ['name','card-name','phone','email','social'].forEach(id => {
-    document.getElementById(id).addEventListener('input', () => clearError(id));
-  });
-
-  document.querySelectorAll('input[name="attendance"]').forEach(r => {
-    r.addEventListener('change', () => clearError('attendance'));
-  });
-
-  document.getElementById('pdpa').addEventListener('change', () => clearError('pdpa'));
-
-  function validate() {
-    let valid = true;
-    const set = (id, test) => {
-      if (!test) {
-        document.getElementById('field-' + id).classList.add('has-error');
-        valid = false;
-      }
-    };
-
-    set('name',      document.getElementById('name').value.trim().length > 1);
-    set('card-name', document.getElementById('card-name').value.trim().length > 0);
-    set('phone',  document.getElementById('phone').value.trim().length > 5);
-    set('email',  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim()));
-    set('social', document.getElementById('social').value.trim().length > 1);
-    set('attendance', !!document.querySelector('input[name="attendance"]:checked'));
-    set('pdpa',   document.getElementById('pdpa').checked);
-
-    return valid;
-  }
-
-  document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    document.getElementById('errorBanner').classList.remove('visible');
-
-    // Honeypot: bots fill hidden fields, real users don't
-    if (document.getElementById('website').value) {
-      document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('successFrame').style.display = '';
-      return;
-    }
-
-    if (!validate()) {
-      const first = document.querySelector('.has-error');
-      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-
-    const btn = document.getElementById('submitBtn');
-    btn.classList.add('loading');
-    btn.disabled = true;
-
-    const selectedAttendance = document.querySelector('input[name="attendance"]:checked').value;
-    const payload = new URLSearchParams({
-      name: document.getElementById('name').value.trim(),
-      cardName: document.getElementById('card-name').value.trim(),
-      nickname: document.getElementById('nickname').value.trim(),
-      organization: document.getElementById('organization').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      social: document.getElementById('social').value.trim(),
-      attendance: selectedAttendance,
-      pdpa: document.getElementById('pdpa').checked ? 'true' : 'false',
-      share: document.getElementById('share').checked ? 'true' : 'false',
-    });
-
-    try {
-      await fetch(SHEET_ACTION, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-        body: payload.toString(),
-      });
-      if (selectedAttendance === 'ยืนยันการเข้าร่วม') {
-        document.getElementById('successTitle').textContent = 'SEE YOU THERE!';
-        document.getElementById('successMessage').innerHTML =
-          'ได้รับการยืนยันการเข้าร่วมของท่านแล้ว<br/>' +
-          'Online Invitation Card จะถูกส่งไปยัง<br/>' +
-          'อีเมลที่ท่านให้ไว้';
-      } else {
-        document.getElementById('successTitle').textContent = 'RESPONSE RECEIVED';
-        document.getElementById('successMessage').innerHTML =
-          'เราได้รับคำตอบของท่านเรียบร้อยแล้ว<br/>' +
-          'ขอบคุณที่แจ้งการตอบรับกลับมา';
-      }
-      document.getElementById('rsvpForm').style.display = 'none';
-      const successFrame = document.getElementById('successFrame');
-      successFrame.style.display = '';
-      window.requestAnimationFrame(() => {
-        successFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-    } catch (err) {
-      console.error(err);
-      document.getElementById('errorBanner').classList.add('visible');
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    }
   });
 </script>
 
