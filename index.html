@@ -122,16 +122,18 @@
 
     /* ── POSTER WALLPAPER ── */
     .wallpaper {
-      position: absolute;
-      top: 0; left: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100vh;
       display: grid;
       grid-template-columns: repeat(1, minmax(0, 1fr));
       grid-auto-rows: 175px;
       align-content: start;
       z-index: 0;
       overflow: hidden;
+      pointer-events: none;
     }
 
     .wallpaper img {
@@ -1115,6 +1117,86 @@
         padding: 0;
       }
       .date-time { gap: 12px; }
+
+      #hero-card .poster-hero {
+        padding: 10% 8% 9%;
+        text-align: center;
+      }
+      #hero-card .invite-title {
+        font-size: clamp(1.6rem, 9.8vw, 3rem);
+        line-height: 0.8;
+      }
+      #hero-card .invite-char {
+        -webkit-text-stroke: 2px #0a0a09 !important;
+        text-shadow: 1px 2px 0 #000, 0 3px 8px rgba(0,0,0,0.45);
+      }
+      #hero-card .invite-line-large {
+        margin-top: -0.5em;
+      }
+      #hero-card .center-card {
+        width: min(240px, 64%);
+        margin-top: -10px;
+      }
+
+      #date-card .poster-bottom {
+        padding: 8% 8% 10%;
+        gap: 2px;
+        text-align: center;
+      }
+      #date-card .date-time {
+        font-size: clamp(1.35rem, 6.8vw, 2.2rem);
+        margin-bottom: 4px;
+      }
+      #date-card .event-info-line,
+      #date-card .event-info-desc {
+        max-width: 100%;
+        text-align: center;
+      }
+      #date-card .event-info-line {
+        width: auto;
+        display: inline-block;
+        line-height: 1.2;
+      }
+      #date-card .event-info-line.is-urgent {
+        display: inline-block;
+      }
+      #date-card .event-info-desc {
+        width: min(94%, 560px);
+        margin: 1px auto 0;
+        line-height: 1.2;
+        font-size: clamp(0.46rem, 1.8vw, 0.62rem);
+      }
+
+      #venue-card .venue-bar {
+        padding: 6.2% 8%;
+        gap: 2px;
+        text-align: center;
+      }
+      #venue-card .venue-bar .venue-name,
+      #venue-card .venue-bar .venue-address {
+        width: 100%;
+        text-align: center;
+      }
+      #venue-card .venue-bar .venue-link {
+        width: auto;
+        display: inline-flex;
+        margin: 0 auto;
+        text-align: center;
+      }
+      #venue-card .venue-bar .venue-address {
+        font-size: clamp(0.54rem, 2.2vw, 0.66rem);
+        line-height: 1.25;
+        margin-bottom: 4px;
+      }
+      #venue-card .venue-bar .venue-name {
+        font-size: clamp(0.9rem, 3.6vw, 1.05rem);
+        line-height: 1.05;
+        margin-bottom: 2px;
+      }
+      #venue-card .venue-bar .venue-link {
+        font-size: clamp(0.5rem, 2vw, 0.62rem);
+        padding: 4px 10px;
+      }
     }
   </style>
 </head>
@@ -1126,30 +1208,45 @@
   function renderWallpaper() {
     const wall = document.querySelector('.wallpaper');
     if (!wall) return;
-    const srcs = ['posters/poster-1.webp','posters/poster-2.webp','posters/poster-3.webp','posters/poster-4.webp'];
+    const webpSrcs = ['posters/poster-1.webp','posters/poster-2.webp','posters/poster-3.webp','posters/poster-4.webp'];
+    const pngSrcs = ['posters/poster-1.png','posters/poster-2.png','posters/poster-3.png','posters/poster-4.png'];
     const idealTileWidth = window.innerWidth <= 760 ? 104 : 125;
     const cols = Math.max(1, Math.ceil(window.innerWidth / idealTileWidth));
     const tileH = Math.round((window.innerWidth / cols) * 1.4);
-    const pageH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    const viewportH = Math.max(
+      window.visualViewport ? Math.round(window.visualViewport.height) : 0,
+      window.innerHeight || 0,
+      document.documentElement.clientHeight || 0
+    );
+    const rows = Math.max(2, Math.ceil(viewportH / tileH) + 2);
+    const total = cols * rows;
+    const eagerCount = cols * Math.min(2, rows);
+    const nextSig = `${cols}:${tileH}:${rows}`;
+
+    if (wall.dataset.sig === nextSig) return;
+    wall.dataset.sig = nextSig;
 
     wall.innerHTML = '';
     wall.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
     wall.style.gridAutoRows = tileH + 'px';
-    wall.style.height = pageH + 'px';
-    const rows = Math.ceil(pageH / tileH) + 1;
-    const eagerRows = Math.ceil((window.innerHeight || document.documentElement.clientHeight) / tileH) + 1;
-    const eagerCount = cols * eagerRows;
-    const total = cols * rows;
+    wall.style.height = viewportH + 'px';
+    const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < total; i++) {
       const img = document.createElement('img');
-      img.src = srcs[i % 4];
+      const idx = i % 4;
+      img.src = webpSrcs[idx];
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = pngSrcs[idx];
+      };
       img.alt = '';
       img.decoding = 'async';
       img.loading = i < eagerCount ? 'eager' : 'lazy';
-      if (i >= eagerCount) img.fetchPriority = 'low';
-      wall.appendChild(img);
+      img.fetchPriority = i < cols ? 'high' : (i < eagerCount ? 'auto' : 'low');
+      fragment.appendChild(img);
     }
+    wall.appendChild(fragment);
   }
 
   function injectCornerBalls() {
@@ -1360,8 +1457,7 @@
       <p class="event-info-line is-urgent attention-shake">DOORS CLOSES @ 18:45 น.</p>
       <p class="event-info-line" style="font-size: clamp(0.8rem, 2.2vw, 1rem); color: #ffffff;">SHOW STARTS @ 19:00 น.</p>
       <p class="event-info-desc">
-        DRESS CODE: MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK.<br/>
-        LET YOUR IMAGINATION RUN WILD.
+        DRESS CODE: MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK. LET YOUR IMAGINATION RUN WILD.
       </p>
     </div>
   </div>
@@ -1610,7 +1706,11 @@
     setInterval(tick, 1000);
   })();
 
-  const SHEET_ACTION = 'https://script.google.com/macros/s/AKfycbws-D6ZxAsptkozGVaS35-6UhLX6kpymP-HWWYQPe3AGJsybHBmK4CEnEaMXYfRQ1j4wQ/exec';
+  const SHEET_ACTION_BY_HOST = {
+    'uts-rsvp.ladderice.co': 'https://script.google.com/macros/s/AKfycbws-D6ZxAsptkozGVaS35-6UhLX6kpymP-HWWYQPe3AGJsybHBmK4CEnEaMXYfRQ1j4wQ/exec',
+    'uts-rsvp-thunder.ladderice.co': 'https://script.google.com/macros/s/AKfycbxpg-DC9kYfR3mtdppDtVJBFivZCh_9-D4SrO2ziHqGkEvNraKo_BQ-gBe9GGHUnMGR7w/exec',
+  };
+  const SHEET_ACTION = SHEET_ACTION_BY_HOST[location.hostname] || SHEET_ACTION_BY_HOST['uts-rsvp.ladderice.co'];
 
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
