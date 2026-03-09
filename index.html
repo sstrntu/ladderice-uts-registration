@@ -300,8 +300,51 @@
       border-radius: 3px;
     }
     #date-card .event-info-desc {
+      font-family: var(--font-body);
+      font-weight: 400;
       font-size: clamp(0.5rem, 1.2vw, 0.72rem);
       color: #1a4a1a;
+      text-shadow: none;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── DRESS CODE CARD ── */
+    #dress-code-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #dress-code-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #dress-code-card .corner-ball { display: none; }
+    #dress-code-card .dress-code-panel {
+      background: url('posters/dresscode-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 614 / 143;
+      padding: 8.5% 9% 9%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 8px;
+    }
+    #dress-code-card .dress-code-title {
+      font-family: var(--font-display);
+      font-size: clamp(0.95rem, 2.8vw, 1.45rem);
+      color: var(--yellow);
+      letter-spacing: 0.08em;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.4);
+    }
+    #dress-code-card .dress-code-copy {
+      max-width: 78%;
+      font-family: var(--font-body);
+      font-size: clamp(0.6rem, 1.65vw, 0.86rem);
+      line-height: 1.45;
+      color: #1f5a2b;
       text-shadow: none;
     }
 
@@ -667,6 +710,14 @@
       color: var(--cream);
       text-shadow: 1px 2px 0 rgba(0,0,0,0.45), 0 6px 18px rgba(0,0,0,0.35);
       max-width: 86%;
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
+    }
+
+    .manifesto-word {
+      display: inline-block;
+      white-space: nowrap;
     }
 
     .manifesto-char {
@@ -720,6 +771,9 @@
       line-height: 1.8;
       margin-bottom: 16px;
       text-shadow: 1px 1px 0 rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.28);
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
     }
 
     .about-body strong { color: var(--cream); font-weight: 500; }
@@ -797,6 +851,9 @@
       font-size: 0.92rem;
       line-height: 1.7;
       text-shadow: 1px 1px 0 rgba(0,0,0,0.35), 0 4px 14px rgba(0,0,0,0.24);
+      word-break: normal;
+      overflow-wrap: normal;
+      hyphens: none;
     }
 
     .details-list strong,
@@ -1225,6 +1282,20 @@
         font-size: clamp(0.46rem, 1.8vw, 0.62rem);
       }
 
+      #dress-code-card .dress-code-panel {
+        padding: 8.5% 8% 9%;
+        gap: 5px;
+      }
+      #dress-code-card .dress-code-title {
+        font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+        line-height: 1.05;
+      }
+      #dress-code-card .dress-code-copy {
+        max-width: 86%;
+        font-size: clamp(0.5rem, 2.05vw, 0.64rem);
+        line-height: 1.22;
+      }
+
       #venue-card .venue-bar {
         padding: 6.2% 8%;
         gap: 2px;
@@ -1424,24 +1495,56 @@
     const manifesto = document.querySelector('.manifesto-text');
     if (!manifesto) return;
 
-    const segmentText = text => {
-      if ('Segmenter' in Intl) {
-        return Array.from(new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(text), part => part.segment);
+    const wordSegmenter = 'Segmenter' in Intl
+      ? new Intl.Segmenter('th', { granularity: 'word' })
+      : null;
+    const graphemeSegmenter = 'Segmenter' in Intl
+      ? new Intl.Segmenter('th', { granularity: 'grapheme' })
+      : null;
+
+    const splitWords = text => {
+      if (!wordSegmenter) {
+        return [{ segment: text, isWordLike: true }];
       }
 
-      return Array.from(text);
+      return Array.from(wordSegmenter.segment(text), part => ({
+        segment: part.segment,
+        isWordLike: Boolean(part.isWordLike),
+      }));
+    };
+
+    const splitGraphemes = text => {
+      if (!graphemeSegmenter) {
+        return Array.from(text);
+      }
+
+      return Array.from(graphemeSegmenter.segment(text), part => part.segment);
     };
 
     const wrapNode = (node, color) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const fragment = document.createDocumentFragment();
 
-        segmentText(node.textContent || '').forEach(char => {
-          const span = document.createElement('span');
-          span.className = 'manifesto-char';
-          span.style.setProperty('--char-color', color);
-          span.textContent = char;
-          fragment.appendChild(span);
+        splitWords(node.textContent || '').forEach(part => {
+          if (!part.segment) return;
+
+          if (!part.isWordLike || /^\s+$/.test(part.segment)) {
+            fragment.appendChild(document.createTextNode(part.segment));
+            return;
+          }
+
+          const word = document.createElement('span');
+          word.className = 'manifesto-word';
+
+          splitGraphemes(part.segment).forEach(char => {
+            const span = document.createElement('span');
+            span.className = 'manifesto-char';
+            span.style.setProperty('--char-color', color);
+            span.textContent = char;
+            word.appendChild(span);
+          });
+
+          fragment.appendChild(word);
         });
 
         return fragment;
@@ -1567,9 +1670,16 @@
         <span>19:00 น.</span>
       </div>
       <p class="event-info-line is-urgent attention-shake">DOORS CLOSES @ 18:45 น.</p>
-      <p class="event-info-line" style="font-size: clamp(0.8rem, 2.2vw, 1rem); color: #ffffff;">SHOW STARTS @ 19:00 น.</p>
-      <p class="event-info-desc">
-        DRESS CODE: MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK. LET YOUR IMAGINATION RUN WILD.
+      <p class="event-info-line" style="font-size: clamp(0.8rem, 2.2vw, 1rem); color: #cc2222; margin-top: 5px;">SHOW STARTS @ 19:00 น.</p>
+    </div>
+  </div>
+
+  <!-- DRESS CODE -->
+  <div class="card-frame" id="dress-code-card">
+    <div class="dress-code-panel">
+      <div class="dress-code-title">DRESS CODE</div>
+      <p class="dress-code-copy">
+        MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK. LET YOUR IMAGINATION RUN WILD.
       </p>
     </div>
   </div>
@@ -1589,8 +1699,8 @@
   <div class="card-frame" id="manifesto-card">
     <div class="manifesto">
       <p class="manifesto-text">
-        "แม้ฟุตบอลไทยจะยังไม่ได้ไปฟุตบอลโลก<br/>
-        แต่<span class="hl">แฟชั่นไทยจะบอลโลกได้</span>"
+        "แม้ฟุตบอลไทยไม่ได้ไปบอลโลก<br/>
+        แต่<span class="hl">แฟชั่นไทยจะไปบอลโลก</span>"
       </p>
     </div>
   </div>
@@ -1645,19 +1755,18 @@
         </ul>
       </div>
 
-      <div class="details-block">
-        <div class="details-label">NOTES</div>
-        <ul class="notes-list">
-          <li>โปรดเผื่อเวลาเดินทางอย่างน้อย <strong>1 ชั่วโมง</strong> เนื่องจากสถานที่จัดงานอยู่ในย่านใจกลางเมือง</li>
-          <li>การเข้าร่วมงานสงวนสิทธิ์เฉพาะผู้ที่ได้รับบัตรเชิญเท่านั้น</li>
-          <li>สถานที่จัดงานมีที่จอดรถจำกัด แนะนำให้เดินทางด้วยรถสาธารณะหรือเรียกรถผ่านแอป</li>
-        </ul>
-      </div>
+        <div class="details-block">
+          <div class="details-label">NOTES</div>
+          <ul class="notes-list">
+            <li>โปรดเผื่อเวลาเดินทางอย่างน้อย <strong>1 ชั่วโมง</strong> เนื่องจากสถานที่จัดงานอยู่ในย่านใจกลางเมือง</li>
+            <li>การเข้าร่วมงานสงวนสิทธิ์เฉพาะผู้ที่ได้รับบัตรเชิญเท่านั้น</li>
+            <li>สถานที่จัดงาน<strong>ไม่มีที่จอดรถ</strong> แนะนำให้เดินทางด้วยรถสาธารณะหรือเรียกรถผ่านแอป</li>
+          </ul>
+        </div>
 
       <div class="details-block">
         <div class="details-label">CONTACT</div>
         <ul class="contact-list">
-          <li><strong>Tel.</strong> 095-503-2478 (K. ปิ่น)</li>
           <li><strong>Email</strong> <a href="mailto:Pattarawadee@turfmapp.com">Pattarawadee@turfmapp.com</a></li>
         </ul>
       </div>
@@ -1692,9 +1801,14 @@
         <div class="form-section-heading">ข้อมูลส่วนตัว</div>
 
         <div class="field" id="field-name">
-          <label for="name">ชื่อ-นามสกุล ภาษาอังกฤษ ที่ต้องการใช้แสดงบน Online Invitation Card <span class="req">*</span></label>
+          <label for="name">ชื่อ-นามสกุล ภาษาอังกฤษ <span class="req">*</span></label>
           <input type="text" id="name" placeholder="ตามที่จะปรากฏบนบัตรเชิญ" autocomplete="name" />
           <span class="field-error">กรุณากรอกชื่อ-นามสกุลภาษาอังกฤษ</span>
+        </div>
+
+        <div class="field" id="field-nickname">
+          <label for="nickname">ชื่อเล่น <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
+          <input type="text" id="nickname" placeholder="ชื่อเล่นของท่าน" autocomplete="nickname" />
         </div>
 
         <div class="field" id="field-card-name">
@@ -1702,11 +1816,6 @@
           <span class="field-help">ระบุได้สูงสุด 10 ตัวอักษร (ตัวอักษรภาษาอังกฤษหรือชื่อเล่น)</span>
           <input type="text" id="card-name" placeholder="เช่น John" maxlength="10" />
           <span class="field-error">กรุณากรอกชื่อสำหรับ Invitation Card (สูงสุด 10 ตัวอักษร)</span>
-        </div>
-
-        <div class="field" id="field-nickname">
-          <label for="nickname">ชื่อเล่น <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
-          <input type="text" id="nickname" placeholder="ชื่อเล่นของท่าน" autocomplete="nickname" />
         </div>
 
         <div class="field" id="field-organization">
@@ -1770,7 +1879,7 @@
             หากท่านช่วยโพสต์ Online Invitation Card ที่เราจะส่งให้หลังจากท่านกรอกฟอร์มนี้ รวมถึงคอนเทนต์ระหว่างงาน
             กดติดตามและแท็ก <strong>@ladderice</strong> ที่
             <a href="https://www.instagram.com/ladderice/" target="_blank" rel="noopener">instagram.com/ladderice</a>
-            พร้อมติดแฮชแท็ก <strong>#LaddericeUndertheStands</strong>
+            พร้อมติดแฮชแท็ก <strong>#LaddericeUndertheStands</strong> และ <strong>#Laddericebkk</strong>
           </span>
           <label class="check-option">
             <input type="checkbox" id="share" />
