@@ -225,7 +225,7 @@
     #hero-card .poster-hero {
       background: url('posters/hero-bg.jpg') center center / 100% 100% no-repeat;
       aspect-ratio: 614 / 454;
-      padding: 10% 9% 9%;
+      padding: 7.5% 9% 11%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -253,7 +253,7 @@
       text-shadow: 2px 3px 0 #000, 0 5px 14px rgba(0,0,0,0.65);
     }
     #hero-card .center-card {
-      margin: -20px auto 0;
+      margin: -34px auto 0;
       width: min(300px, 58%);
     }
 
@@ -635,31 +635,38 @@
     }
 
     /* ── MANIFESTO ── */
+    #manifesto-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #manifesto-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #manifesto-card .corner-ball { display: none; }
+
     .manifesto {
-      background: linear-gradient(135deg, var(--green) 0%, #226622 100%);
-      padding: 36px 32px;
+      background: url('posters/manifesto-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 640 / 143;
+      padding: 10% 10.5%;
       text-align: center;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    .manifesto::before,
-    .manifesto::after {
-      content: '';
-      position: absolute;
-      left: 20px; right: 20px;
-      height: 1px;
-      background: rgba(255,255,255,0.12);
-    }
-
-    .manifesto::before { top: 0; }
-    .manifesto::after { bottom: 0; }
 
     .manifesto-text {
       font-family: var(--font-body);
-      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-size: clamp(1rem, 2.9vw, 1.55rem);
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.4;
       color: var(--cream);
+      text-shadow: 1px 2px 0 rgba(0,0,0,0.45), 0 6px 18px rgba(0,0,0,0.35);
+      max-width: 86%;
     }
 
     .manifesto-char {
@@ -677,16 +684,31 @@
     }
 
     /* ── ABOUT SECTION ── */
+    #about-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #about-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #about-card .corner-ball { display: none; }
+
     .about-section {
-      background: var(--dark);
-      padding: 36px 28px;
+      background: url('posters/about-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 614 / 530;
+      padding: 11% 10% 9%;
+      min-height: 0;
     }
 
     .about-section h2 {
       font-family: var(--font-display);
       font-size: 1.6rem;
       color: var(--yellow);
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.55), 0 6px 18px rgba(0,0,0,0.35);
       margin-bottom: 20px;
       text-align: center;
       letter-spacing: 0.04em;
@@ -694,9 +716,10 @@
 
     .about-body {
       font-size: 0.95rem;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.78);
       line-height: 1.8;
       margin-bottom: 16px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.28);
     }
 
     .about-body strong { color: var(--cream); font-weight: 500; }
@@ -719,16 +742,30 @@
     }
 
     /* ── EVENT DETAILS ── */
+    #details-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #details-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #details-card .corner-ball { display: none; }
+
     .details-section {
-      background: linear-gradient(180deg, #1e274d 0%, #131a32 100%);
-      padding: 36px 28px;
+      background: url('posters/event-details-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 614 / 647;
+      padding: 12% 10% 9%;
     }
 
     .details-section h2 {
       font-family: var(--font-display);
       font-size: 1.6rem;
       color: var(--yellow);
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.55), 0 6px 18px rgba(0,0,0,0.35);
       margin-bottom: 24px;
       text-align: center;
       letter-spacing: 0.04em;
@@ -737,7 +774,7 @@
     .details-block + .details-block {
       margin-top: 22px;
       padding-top: 22px;
-      border-top: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid rgba(255,255,255,0.16);
     }
 
     .details-label {
@@ -746,6 +783,7 @@
       color: var(--yellow);
       margin-bottom: 10px;
       letter-spacing: 0.05em;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.25);
     }
 
     .details-list,
@@ -755,9 +793,10 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      color: rgba(255,255,255,0.72);
+      color: rgba(255,255,255,0.78);
       font-size: 0.92rem;
       line-height: 1.7;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.35), 0 4px 14px rgba(0,0,0,0.24);
     }
 
     .details-list strong,
@@ -786,10 +825,29 @@
       z-index: 1;
     }
 
+    #rsvp-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #rsvp-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #rsvp-card .corner-ball { display: none; }
+
     .form-card {
       background: #293a80;
       padding: 32px 24px;
       position: relative;
+    }
+
+    #rsvp-card .form-card {
+      background: url('posters/rsvp-form-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 614 / 1455;
+      padding: 12.5% 10% 9%;
     }
 
     .form-title {
@@ -1119,7 +1177,7 @@
       .date-time { gap: 12px; }
 
       #hero-card .poster-hero {
-        padding: 10% 8% 9%;
+        padding: 7% 8% 11%;
         text-align: center;
       }
       #hero-card .invite-title {
@@ -1135,7 +1193,7 @@
       }
       #hero-card .center-card {
         width: min(240px, 64%);
-        margin-top: -10px;
+        margin-top: -22px;
       }
 
       #date-card .poster-bottom {
@@ -1196,6 +1254,60 @@
       #venue-card .venue-bar .venue-link {
         font-size: clamp(0.5rem, 2vw, 0.62rem);
         padding: 4px 10px;
+      }
+
+      .about-section {
+        aspect-ratio: auto;
+        min-height: 650px;
+        padding: 84px 42px 62px;
+      }
+      .about-section h2 {
+        font-size: 1.45rem;
+        margin-bottom: 16px;
+      }
+      .about-body {
+        font-size: 0.88rem;
+        line-height: 1.7;
+        margin-bottom: 14px;
+      }
+      .about-tags {
+        gap: 6px;
+        margin-top: 16px;
+      }
+      .tag {
+        font-size: 0.68rem;
+        padding: 5px 10px;
+      }
+
+      .details-section {
+        aspect-ratio: auto;
+        min-height: 790px;
+        padding: 88px 42px 64px;
+      }
+      .details-section h2 {
+        font-size: 1.45rem;
+        margin-bottom: 18px;
+      }
+      .details-block + .details-block {
+        margin-top: 18px;
+        padding-top: 18px;
+      }
+      .details-label {
+        font-size: 0.92rem;
+        margin-bottom: 8px;
+      }
+      .details-list,
+      .notes-list,
+      .contact-list {
+        gap: 8px;
+        font-size: 0.84rem;
+        line-height: 1.6;
+      }
+
+      #rsvp-card .form-card {
+        aspect-ratio: auto;
+        min-height: 1400px;
+        padding: 98px 40px 72px;
       }
     }
   </style>
@@ -1474,7 +1586,7 @@
   </div>
 
   <!-- MANIFESTO -->
-  <div class="card-frame">
+  <div class="card-frame" id="manifesto-card">
     <div class="manifesto">
       <p class="manifesto-text">
         "แม้ฟุตบอลไทยจะยังไม่ได้ไปฟุตบอลโลก<br/>
@@ -1484,7 +1596,7 @@
   </div>
 
   <!-- ABOUT -->
-  <div class="card-frame">
+  <div class="card-frame" id="about-card">
     <div class="about-section">
       <h2>ABOUT THE EVENT</h2>
       <p class="about-body">
@@ -1518,7 +1630,7 @@
   </div>
 
   <!-- EVENT DETAILS -->
-  <div class="card-frame">
+  <div class="card-frame" id="details-card">
     <div class="details-section">
       <h2>EVENT DETAILS</h2>
 
@@ -1565,7 +1677,7 @@
   </div>
 
   <form id="rsvpForm" novalidate>
-    <div class="card-frame">
+    <div class="card-frame" id="rsvp-card">
       <div class="form-card">
 
       <div class="form-title">RSVP</div>
