@@ -1438,10 +1438,12 @@
     document.querySelectorAll('.card-frame').forEach(frame => {
       if (frame.id === 'hero-card' || frame.id === 'date-card' || frame.id === 'venue-card') return;
       if (frame.querySelector('.corner-ball')) return;
+      const svgParser = new DOMParser();
       ['tl','tr','bl','br'].forEach(pos => {
         const b = document.createElement('div');
         b.className = 'corner-ball ' + pos;
-        b.innerHTML = ballSvg;
+        const svgDoc = svgParser.parseFromString(ballSvg, 'image/svg+xml');
+        b.appendChild(svgDoc.documentElement);
         frame.appendChild(b);
       });
     });
@@ -1836,6 +1838,12 @@
           <span class="field-error">กรุณากรอก Social Media ของท่าน</span>
         </div>
 
+        <!-- Honeypot: visually hidden, real users never see or fill this -->
+        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label for="website">Website (leave blank)</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
         <div class="form-section-heading">การยืนยันเข้าร่วมงาน</div>
 
         <div class="field" id="field-attendance">
@@ -1980,6 +1988,13 @@
   document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     document.getElementById('errorBanner').classList.remove('visible');
+
+    // Honeypot: bots fill hidden fields, real users don't
+    if (document.getElementById('website').value) {
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('successFrame').style.display = '';
+      return;
+    }
 
     if (!validate()) {
       const first = document.querySelector('.has-error');
