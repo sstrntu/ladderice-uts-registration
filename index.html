@@ -14,6 +14,13 @@
       font-weight: normal;
       font-style: normal;
     }
+    @font-face {
+      font-family: 'ThaiDisplay';
+      src: url('thai-font.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      unicode-range: U+0E00-U+0E7F;
+    }
   </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,8 +38,8 @@
       --dark:      #1a1a18;
       --brown:     #3d2c1a;
       --error:     #ff3333;
-      --font-display: 'CustomDisplay', Impact, sans-serif;
-      --font-body:    'Sarabun', sans-serif;
+      --font-display: 'CustomDisplay', 'ThaiDisplay', Impact, sans-serif;
+      --font-body:    'ThaiDisplay', 'Sarabun', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -46,6 +53,71 @@
       overflow-x: hidden;
       position: relative;
       display: flow-root; /* prevents margin-collapse with .frame-outer */
+    }
+
+    /* ── COUNTDOWN BAR ── */
+    #countdown-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: var(--red);
+      border-bottom: 3px solid var(--yellow);
+      text-align: center;
+      padding: 10px 16px;
+      font-family: var(--font-display);
+    }
+
+    #countdown-bar .countdown-label {
+      font-size: clamp(0.55rem, 1.6vw, 0.7rem);
+      color: var(--yellow);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    #countdown-bar .countdown-units {
+      display: flex;
+      justify-content: center;
+      gap: clamp(10px, 3vw, 24px);
+    }
+
+    #countdown-bar .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 44px;
+    }
+
+    #countdown-bar .countdown-num {
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    #countdown-bar .countdown-unit-label {
+      font-size: clamp(0.5rem, 1.4vw, 0.62rem);
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+
+    #countdown-bar .countdown-sep {
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      color: rgba(255,255,255,0.4);
+      line-height: 1;
+      align-self: flex-start;
+      padding-top: 0;
+    }
+
+    #countdown-bar.expired .countdown-label {
+      color: #ffffff;
+    }
+
+    #countdown-bar.expired .countdown-expired-msg {
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
+      color: #ffffff;
+      letter-spacing: 0.08em;
     }
 
     /* ── POSTER WALLPAPER ── */
@@ -128,36 +200,157 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(180deg,
-          var(--blue) 0%,
-          var(--blue-lt) 30%,
-          #7a8833 60%,
-          var(--green-lt) 100%);
-    }
-
-    .poster-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.22'/%3E%3C/svg%3E");
-      opacity: 0.72;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-    }
-
-    .poster-hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg,
-        #ff0000, #ff8800, #ffdd00, #00cc44, #0088ff, #8800ff);
     }
 
     .poster-hero > * {
       position: relative;
       z-index: 1;
+    }
+
+    /* ── HERO CARD: image already contains its own decorative frame ── */
+    #hero-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #hero-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #hero-card .corner-ball { display: none; }
+    #hero-card .poster-hero {
+      background: url('posters/hero-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 614 / 454;
+      padding: 10% 9% 9%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    #hero-card .invite-title {
+      font-size: clamp(1.8rem, 6.5vw, 4.6rem);
+      margin-bottom: 0;
+      line-height: 0.82;
+      filter: none;
+    }
+    #hero-card .invite-line-large {
+      margin-top: -0.55em;
+    }
+    /* Override gradient — solid yellow with clean stroke */
+    #hero-card .invite-char {
+      color: #ffe833 !important;
+      background-image: none !important;
+      -webkit-background-clip: unset !important;
+      background-clip: unset !important;
+      -webkit-text-fill-color: #ffe833 !important;
+      -webkit-text-stroke: 3px #0a0a09 !important;
+      paint-order: stroke fill;
+      text-shadow: 2px 3px 0 #000, 0 5px 14px rgba(0,0,0,0.65);
+    }
+    #hero-card .center-card {
+      margin: -20px auto 0;
+      width: min(300px, 58%);
+    }
+
+    /* ── DATE CARD: image already contains its own decorative frame ── */
+    #date-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #date-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #date-card .corner-ball { display: none; }
+    #date-card .poster-bottom {
+      background: url('posters/date-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 1023 / 375;
+      padding: 9% 7%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    #date-card .poster-bottom::before { display: none; }
+    #date-card .date-time {
+      font-size: clamp(1.6rem, 5.5vw, 3rem);
+      margin-bottom: 6px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.5);
+    }
+    #date-card .event-info-line {
+      font-size: clamp(0.75rem, 2.2vw, 1.1rem);
+      margin-bottom: 3px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    }
+    #date-card .event-info-line.is-urgent {
+      color: var(--dark);
+      font-size: clamp(0.85rem, 2.6vw, 1.25rem);
+      text-shadow: none;
+      background: var(--yellow);
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+    #date-card .event-info-desc {
+      font-size: clamp(0.5rem, 1.2vw, 0.72rem);
+      color: #1a4a1a;
+      text-shadow: none;
+    }
+
+    /* ── VENUE CARD: image already contains its own decorative frame ── */
+    #venue-card {
+      background: none;
+      padding: 0;
+      box-shadow: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #venue-card > *:not(.corner-ball) {
+      border: none;
+      border-radius: 0;
+    }
+    #venue-card .corner-ball { display: none; }
+    #venue-card .venue-bar {
+      background: url('posters/venue-bg.jpg') center center / 100% 100% no-repeat;
+      aspect-ratio: 1228 / 340;
+      padding: 8% 7%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    #venue-card .venue-bar .venue-name {
+      font-size: clamp(1rem, 2.8vw, 1.4rem);
+      margin-bottom: 4px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.7), 0 4px 10px rgba(0,0,0,0.6);
+    }
+    #venue-card .venue-bar .venue-address {
+      font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+    }
+    #venue-card .venue-bar .venue-link {
+      font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+      animation: map-flash-solid 1.15s ease-in-out infinite;
+    }
+    @keyframes map-flash-solid {
+      0%, 100% {
+        background: var(--dark);
+        color: var(--yellow);
+        box-shadow: 0 0 0 rgba(240,200,32,0);
+      }
+      50% {
+        background: var(--yellow);
+        color: var(--dark);
+        box-shadow: 0 0 0 4px rgba(240,200,32,0.3);
+      }
     }
 
     .invite-title {
@@ -339,7 +532,7 @@
 
     .event-info-line {
       font-family: var(--font-display);
-      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-size: clamp(1rem, 3vw, 1.3rem);
       color: var(--yellow);
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -395,7 +588,7 @@
     }
 
     .venue-bar .venue-address {
-      font-family: var(--font-body);
+      font-family: var(--font-display);
       font-size: 0.85rem;
       color: rgba(255,255,255,0.7);
       line-height: 1.5;
@@ -963,6 +1156,7 @@
     // Inject corner balls into each card frame
     const ballSvg = '<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1a1a18" stroke="#f0c820" stroke-width="2"/><circle cx="16" cy="16" r="6" stroke="#f0c820" stroke-width="1" fill="none"/><line x1="16" y1="2" x2="16" y2="10" stroke="#f0c820" stroke-width="1"/><line x1="16" y1="22" x2="16" y2="30" stroke="#f0c820" stroke-width="1"/><line x1="2" y1="16" x2="10" y2="16" stroke="#f0c820" stroke-width="1"/><line x1="22" y1="16" x2="30" y2="16" stroke="#f0c820" stroke-width="1"/></svg>';
     document.querySelectorAll('.card-frame').forEach(frame => {
+      if (frame.id === 'hero-card' || frame.id === 'date-card' || frame.id === 'venue-card') return;
       if (frame.querySelector('.corner-ball')) return;
       ['tl','tr','bl','br'].forEach(pos => {
         const b = document.createElement('div');
@@ -1113,11 +1307,37 @@
   window.addEventListener('resize', renderWallpaper);
 </script>
 
+<!-- ── COUNTDOWN BAR ── -->
+<div id="countdown-bar">
+  <div class="countdown-label">RSVP CLOSES IN</div>
+  <div class="countdown-units">
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-days">00</span>
+      <span class="countdown-unit-label">DAYS</span>
+    </div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-hours">00</span>
+      <span class="countdown-unit-label">HRS</span>
+    </div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-mins">00</span>
+      <span class="countdown-unit-label">MIN</span>
+    </div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-secs">00</span>
+      <span class="countdown-unit-label">SEC</span>
+    </div>
+  </div>
+</div>
+
 <!-- ── PAGE STACK — all cards float on wallpaper ── -->
 <div class="form-stack">
 
   <!-- HERO -->
-  <div class="card-frame">
+  <div class="card-frame" id="hero-card">
     <div class="poster-hero">
       <h1 class="invite-title">
         <span class="invite-line invite-line-small">YOU'VE BEEN</span>
@@ -1130,7 +1350,7 @@
   </div>
 
   <!-- DATE / DRESS CODE -->
-  <div class="card-frame">
+  <div class="card-frame" id="date-card">
     <div class="poster-bottom">
       <div class="date-time">
         <span>13 มี.ค.</span>
@@ -1138,6 +1358,7 @@
         <span>19:00 น.</span>
       </div>
       <p class="event-info-line is-urgent attention-shake">DOORS CLOSES @ 18:45 น.</p>
+      <p class="event-info-line" style="font-size: clamp(0.8rem, 2.2vw, 1rem); color: #ffffff;">SHOW STARTS @ 19:00 น.</p>
       <p class="event-info-desc">
         DRESS CODE: MAKE TRADITIONAL THAI FITS A STREETWEAR LOOK.<br/>
         LET YOUR IMAGINATION RUN WILD.
@@ -1146,7 +1367,7 @@
   </div>
 
   <!-- VENUE -->
-  <div class="card-frame">
+  <div class="card-frame" id="venue-card">
     <div class="venue-bar">
       <div class="venue-name">BAAN SAEN SAEP</div>
       <div class="venue-address">20 2 Rama I Rd, Wang Mai,<br/>Pathum Wan, Bangkok 10330</div>
@@ -1268,6 +1489,23 @@
           <span class="field-error">กรุณากรอกชื่อ-นามสกุลภาษาอังกฤษ</span>
         </div>
 
+        <div class="field" id="field-card-name">
+          <label for="card-name">ชื่อที่ต้องการให้แสดงบน Invitation Card <span class="req">*</span></label>
+          <span class="field-help">ระบุได้สูงสุด 10 ตัวอักษร (ตัวอักษรภาษาอังกฤษหรือชื่อเล่น)</span>
+          <input type="text" id="card-name" placeholder="เช่น John" maxlength="10" />
+          <span class="field-error">กรุณากรอกชื่อสำหรับ Invitation Card (สูงสุด 10 ตัวอักษร)</span>
+        </div>
+
+        <div class="field" id="field-nickname">
+          <label for="nickname">ชื่อเล่น <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
+          <input type="text" id="nickname" placeholder="ชื่อเล่นของท่าน" autocomplete="nickname" />
+        </div>
+
+        <div class="field" id="field-organization">
+          <label for="organization">องค์กร / บริษัท / สถาบัน <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
+          <input type="text" id="organization" placeholder="ชื่อองค์กรหรือสถาบันของท่าน" autocomplete="organization" />
+        </div>
+
         <div class="field" id="field-phone">
           <label for="phone">เบอร์โทรศัพท์ <span class="req">*</span></label>
           <input type="tel" id="phone" placeholder="เช่น 081-234-5678" autocomplete="tel" />
@@ -1347,6 +1585,31 @@
 </div>
 
 <script>
+  // ── COUNTDOWN TIMER (March 10 2026, 10:00 AM BKK = UTC+7) ──
+  (function() {
+    const TARGET = new Date('2026-03-10T03:00:00Z');
+    const pad = n => String(n).padStart(2, '0');
+    function tick() {
+      const diff = TARGET - Date.now();
+      const bar = document.getElementById('countdown-bar');
+      if (diff <= 0) {
+        bar.classList.add('expired');
+        bar.innerHTML = '<div class="countdown-label">RSVP CLOSED</div>';
+        return;
+      }
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)    / 1000);
+      document.getElementById('cd-days').textContent  = pad(days);
+      document.getElementById('cd-hours').textContent = pad(hours);
+      document.getElementById('cd-mins').textContent  = pad(mins);
+      document.getElementById('cd-secs').textContent  = pad(secs);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
   const SHEET_ACTION = 'https://script.google.com/macros/s/AKfycbws-D6ZxAsptkozGVaS35-6UhLX6kpymP-HWWYQPe3AGJsybHBmK4CEnEaMXYfRQ1j4wQ/exec';
 
   if ('scrollRestoration' in history) {
@@ -1369,7 +1632,7 @@
     document.getElementById('field-' + id)?.classList.remove('has-error');
   }
 
-  ['name','phone','email','social'].forEach(id => {
+  ['name','card-name','phone','email','social'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => clearError(id));
   });
 
@@ -1388,7 +1651,8 @@
       }
     };
 
-    set('name',   document.getElementById('name').value.trim().length > 1);
+    set('name',      document.getElementById('name').value.trim().length > 1);
+    set('card-name', document.getElementById('card-name').value.trim().length > 0);
     set('phone',  document.getElementById('phone').value.trim().length > 5);
     set('email',  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim()));
     set('social', document.getElementById('social').value.trim().length > 1);
@@ -1415,6 +1679,9 @@
     const selectedAttendance = document.querySelector('input[name="attendance"]:checked').value;
     const payload = new URLSearchParams({
       name: document.getElementById('name').value.trim(),
+      cardName: document.getElementById('card-name').value.trim(),
+      nickname: document.getElementById('nickname').value.trim(),
+      organization: document.getElementById('organization').value.trim(),
       phone: document.getElementById('phone').value.trim(),
       email: document.getElementById('email').value.trim(),
       social: document.getElementById('social').value.trim(),
