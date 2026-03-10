@@ -1815,8 +1815,8 @@
         </div>
 
         <div class="field" id="field-organization">
-          <label for="organization">องค์กร / บริษัท / สถาบัน <span style="color:rgba(255,255,255,0.35)">(ไม่บังคับ)</span></label>
-          <input type="text" id="organization" placeholder="ชื่อองค์กรหรือสถาบันของท่าน" autocomplete="organization" />
+          <label for="organization">องค์กร / บริษัท / สถาบัน</label>
+          <input type="text" id="organization" placeholder="ชื่อองค์กรหรือสถาบันของท่าน" autocomplete="organization" required />
         </div>
 
         <div class="field" id="field-phone">
@@ -1904,9 +1904,9 @@
 </div>
 
 <script>
-  // ── COUNTDOWN TIMER (March 10 2026, 10:00 AM BKK = UTC+7) ──
+  // ── COUNTDOWN TIMER (March 10 2026, 18:00 BKK = UTC+7) ──
   (function() {
-    const TARGET = new Date('2026-03-10T03:00:00Z');
+    const TARGET = new Date('2026-03-10T11:00:00Z');
     const pad = n => String(n).padStart(2, '0');
     function tick() {
       const diff = TARGET - Date.now();
@@ -1974,8 +1974,9 @@
       }
     };
 
-    set('name',      document.getElementById('name').value.trim().length > 1);
-    set('card-name', document.getElementById('card-name').value.trim().length > 0);
+    set('name',         document.getElementById('name').value.trim().length > 1);
+    set('card-name',    document.getElementById('card-name').value.trim().length > 0);
+    set('organization', document.getElementById('organization').value.trim().length > 0);
     set('phone',  document.getElementById('phone').value.trim().length > 5);
     set('email',  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim()));
     set('social', document.getElementById('social').value.trim().length > 1);
