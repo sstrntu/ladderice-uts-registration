@@ -1815,8 +1815,9 @@
         </div>
 
         <div class="field" id="field-organization">
-          <label for="organization">องค์กร / บริษัท / สถาบัน</label>
+          <label for="organization">องค์กร / บริษัท / สถาบัน <span class="req">*</span></label>
           <input type="text" id="organization" placeholder="ชื่อองค์กรหรือสถาบันของท่าน" autocomplete="organization" required />
+          <span class="field-error">กรุณากรอกองค์กร / บริษัท / สถาบัน</span>
         </div>
 
         <div class="field" id="field-phone">
@@ -1955,7 +1956,7 @@
     document.getElementById('field-' + id)?.classList.remove('has-error');
   }
 
-  ['name','card-name','phone','email','social'].forEach(id => {
+  ['name','card-name','organization','phone','email','social'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => clearError(id));
   });
 
